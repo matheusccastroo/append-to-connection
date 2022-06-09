@@ -45,9 +45,3 @@ Tracker.autorun(() => {
     AppendToConnection._pushToServer();
   }
 });
-
-import { Accounts } from 'meteor/accounts-base';
-Accounts.onLogin(args => {
-  if (args.error) return;
-  AppendToConnection._pushToServer(...args);
-});
