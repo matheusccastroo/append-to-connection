@@ -17,12 +17,3 @@ AppendToConnection.register(() => {
     return {};
 });
 ```
-
-There are two types of hooks, the `onConnection` hook and the `onLogin` hook. You register both the same way, but the `onLogin` hook has different parameters:
-```
-// onLogin -> To know what is what, check the onLogin meteor docs: https://docs.meteor.com/api/accounts-multi.html#AccountsCommon-onLogin
-AppendToConnection.register(({error, loginDetails}) => {});
-
-// onConnection
-AppendToConnection.register(() => {});
-```

@@ -10,14 +10,14 @@ class AppendToConnectionHooks {
     this._hooks.push(hooks);
     this._hooksChanged.changed();
   }
-  _reduceAll(...args) {
+  _reduceAll() {
     const hooks = this._hooks;
     if (!hooks.length) return;
 
-    return hooks.reduce((acc, hook) => ({ ...acc, ...hook(...args) }), {});
+    return hooks.reduce((acc, hook) => ({ ...acc, ...hook() }), {});
   }
-  _pushToServer(...args) {
-    const objectToAppend = this._reduceAll(...args);
+  _pushToServer() {
+    const objectToAppend = this._reduceAll();
     Meteor.call('appendDataToConnection', objectToAppend);
   }
   getHooks() {
