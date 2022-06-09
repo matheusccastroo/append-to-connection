@@ -2,21 +2,27 @@ import { Meteor } from 'meteor/meteor';
 
 class AppendToConnectionHooks {
   constructor() {
-    this._callbacks = [];
+    this._hooks = [];
+    this._hooksChanged = new Tracker.Dependency();
   }
-  register(cb) {
-    if (!cb) return;
-    this._callbacks.push(cb);
+  register(hooks) {
+    if (!hooks || (Array.isArray(hooks) && !hooks?.length)) return;
+    this._hooks.push(hooks);
+    this._hooksChanged.changed();
   }
   _reduceAll(...args) {
-    const cbs = this._callbacks;
-    if (!cbs.length) return;
+    const hooks = this._hooks;
+    if (!hooks.length) return;
 
-    return cbs.reduce((acc, cb) => ({ ...acc, ...cb(...args) }), {});
+    return hooks.reduce((acc, hook) => ({ ...acc, ...hook(...args) }), {});
   }
   _pushToServer(...args) {
     const objectToAppend = this._reduceAll(...args);
     Meteor.call('appendDataToConnection', objectToAppend);
+  }
+  getHooks() {
+    this._hooksChanged.depend();
+    return this._hooks;
   }
 }
 
@@ -26,6 +32,7 @@ const oldStatus = new ReactiveVar(null);
 Tracker.autorun(() => {
   const { status: currentStatus } = Meteor.status();
   const oldStatusValue = oldStatus.get();
+  const hasHooks = !!AppendToConnection.getHooks()?.length;
 
   const isConnected = currentStatus === 'connected';
   const wasConnected = oldStatusValue === 'connected';
@@ -34,7 +41,7 @@ Tracker.autorun(() => {
     oldStatus.set(currentStatus);
   }
 
-  if (!wasConnected && isConnected) {
+  if (!wasConnected && isConnected && hasHooks) {
     AppendToConnection._pushToServer();
   }
 });
