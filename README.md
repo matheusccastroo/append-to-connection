@@ -17,3 +17,10 @@ AppendToConnection.register(() => {
     return {};
 });
 ```
+
+It's also good (but not required) to specify the allowed fields to be inserted (on server):
+```
+import { AppendToConnectionAllowedFields } from "meteor/matheusccastro:append-to-connection";
+
+AppendToConnectionAllowedFields(['field1', 'field2'])
+```
