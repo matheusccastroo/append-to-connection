@@ -1,6 +1,6 @@
 Package.describe({
   name: 'matheusccastro:append-to-connection',
-  version: '1.0.4',
+  version: '1.0.5',
   summary: 'Easily append additional data to your DDP connection object.',
   git: 'https://github.com/matheusccastroo/append-to-connection',
   documentation: 'README.md',

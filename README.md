@@ -24,3 +24,10 @@ import { AppendToConnectionAllowedFields } from "meteor/matheusccastro:append-to
 
 AppendToConnectionAllowedFields(['field1', 'field2'])
 ```
+
+You can also enable the debugger (on the client) using:
+```
+import { AppendToConnection } from "meteor/matheusccastro:append-to-connection";
+
+AppendToConnection.enableDebug();
+```
